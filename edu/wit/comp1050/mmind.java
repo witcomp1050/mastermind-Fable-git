@@ -26,9 +26,6 @@ public class mmind extends Application {
     private static boolean allowBlankSpaces;
     private static Guess secretCode;
 
-    @FXML
-    Button submitbutton;
-
     @Override
     public void start(Stage stage) {
         Parent root = null;
@@ -44,15 +41,11 @@ public class mmind extends Application {
         stage.show();
     }
 
-    public void initialize(){
-
-    }
-
     public static void main(String[] args) throws IOException {
         setupGame();
 
         //testUnderlyingCode();
-        launch();
+        launch(args);
     }
 
     public static void setupGame(){
@@ -86,7 +79,7 @@ public class mmind extends Application {
             }
 
             Guess g = new Guess(guess);
-            secretCode.printGuess();
+            //secretCode.printGuess(); //Show answer cheat
             Utils.println("");
             Utils.println(g.score(secretCode));
             if (g.equals(secretCode)){

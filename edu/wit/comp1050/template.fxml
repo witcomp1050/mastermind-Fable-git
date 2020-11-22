@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Circle?>
 
 
-<StackPane prefHeight="449.0" prefWidth="201.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane prefHeight="449.0" prefWidth="201.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wit.comp1050.guiController">
    <children>
       <ScrollPane prefHeight="464.0" prefWidth="256.0">
         <content>
@@ -28,7 +28,7 @@
                         </HBox>
                         <Pane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="submitbutton" layoutX="47.0" layoutY="23.0" mnemonicParsing="false" text="Submit" />
+                              <Button fx:id="submitbutton" layoutX="47.0" layoutY="23.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
                            </children>
                         </Pane>
                      </children>
