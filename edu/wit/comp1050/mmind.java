@@ -114,6 +114,8 @@ public class mmind extends Application {
     public static int getGuesses(){
         return guesses;
     }
+    public static boolean allowDuplicates(){return allowDuplicates;}
+    public static boolean allowBlankSpaces(){return allowBlankSpaces;}
 
     public static boolean makeAGuess(Guess guess){
         guesses--;

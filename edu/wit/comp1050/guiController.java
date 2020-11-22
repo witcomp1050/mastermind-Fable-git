@@ -88,7 +88,6 @@ public class guiController implements Initializable{
                 if (stackPane instanceof StackPane){
                     for (Node child : ((StackPane) stackPane).getChildren()){
                         if (child instanceof Button){
-                            Utils.println("Found Button");
                             if (child.getId().contains("pegButton")) {
                                 child.setVisible(false);
                             }
@@ -129,8 +128,14 @@ public class guiController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        pegColors.put(0,Paint.valueOf("White"));
-        for (int i = 1; i < mmind.getColors(); i++){
+        int k;
+        if (mmind.allowBlankSpaces()){
+            k = 0;
+        } else{
+            k = -1;
+        }
+        pegColors.put(k,Paint.valueOf("White")); //white gets tucked into i = -1 when no blank spaces are allowed
+        for (int i = k+1; i < mmind.getColors(); i++){
             pegColors.put(i, Color.hsb(110*i,1,1-((double)i%mmind.getColors())/(1.8 * mmind.getColors())));
         }
         submit();
