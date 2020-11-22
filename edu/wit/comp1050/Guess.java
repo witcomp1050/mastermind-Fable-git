@@ -36,13 +36,18 @@ public class Guess {
     public void printGuess() {
         Properties p = Utils.importProperties();
         int codeSize = Integer.parseInt(p.getProperty("codeSize","4"));
-        for (int i = 0; i < codeSize; i++){
-            Utils.println("peg #" + (i+1) + ": " + pegs.get(i) + " ");
+        if (pegs.size() >0) {
+            for (int i = 0; i < codeSize; i++) {
+                Utils.println("peg #" + (i + 1) + ": " + pegs.get(i) + " ");
+            }
         }
     }
 
     public boolean equals(Guess guess) {
         int i = 0;
+        if (guess.pegs.size() != pegs.size()){
+            return false;
+        }
         for (int peg: guess.pegs){
             if (peg != pegs.get(i)){
                 return false;

@@ -60,11 +60,25 @@ public class mmind extends Application {
 
     public static Guess generateCode(){
         Guess secret = new Guess();
-        Random rand = new Random();
         for (int i = 0; i < secret.pegs.size(); i++){
-            secret.pegs.set(i,Math.abs(rand.nextInt()%colors));
+            secret.pegs.set(i,generateDigit());
         }
+        secret.printGuess();
         return secret;
+    }
+
+    public static int generateDigit(){
+        Random rand = new Random();
+        int digit = Math.abs(rand.nextInt()%colors);
+        if (allowDuplicates) {
+            return digit;
+        } else{
+            if (secretCode.pegs.contains(digit)){
+                return generateDigit();
+            } else{
+                return digit;
+            }
+        }
     }
 
     public static void testUnderlyingCode(){
@@ -89,5 +103,20 @@ public class mmind extends Application {
             guessNumber++;
             guesses--;
         }
+    }
+
+    public static int getCodeSize(){
+        return codeSize;
+    }
+    public static int getColors(){
+        return colors;
+    }
+    public static int getGuesses(){
+        return guesses;
+    }
+
+    public static boolean makeAGuess(Guess guess){
+        guesses--;
+        return guess.equals(secretCode);
     }
 }
