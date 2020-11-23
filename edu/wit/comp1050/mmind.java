@@ -96,7 +96,6 @@ public class mmind extends Application {
                 Utils.print("peg " + (i+1)  + ": ");
                 guess.add(input.nextInt());
             }
-
             Guess g = new Guess(guess);
             //secretCode.printGuess(); //Show answer cheat
             Utils.println("");
