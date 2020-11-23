@@ -38,6 +38,7 @@ public class mmind extends Application {
         stage.setTitle("Master Mind");
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
+        stage.setResizable(false);
         stage.show();
     }
 
