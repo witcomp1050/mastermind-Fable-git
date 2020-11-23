@@ -1,14 +1,9 @@
 package edu.wit.comp1050;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.apache.commons.configuration2.Configuration;
@@ -124,7 +119,6 @@ public class mmind extends Application {
     public static int getGuesses(){
         return guesses;
     }
-    public static boolean allowDuplicates(){return allowDuplicates;}
     public static boolean allowBlankSpaces(){return allowBlankSpaces;}
 
     public static Feedback makeAGuess(Guess guess){
