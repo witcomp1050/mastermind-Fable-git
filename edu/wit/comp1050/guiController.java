@@ -6,8 +6,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -16,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import jdk.jfr.Event;
 
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,44 +30,46 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class guiController implements Initializable{
-    private int index = 0;
-    private Map<Integer, Paint> pegColors = new HashMap<>();
-
-    @FXML
-    private Button submitButton;
-    @FXML
-    private Button pegButton;
-    @FXML
-    private Circle peg;
-
+    private final Map<Integer, Paint> pegColors = new HashMap<>();
     @FXML
     private VBox board;
 
     @FXML
     private void submit(){
         if (mmind.getGuesses() > 0){
-            Node currentSubmission = board.getChildren().get(board.getChildren().size()-1);
+            Node currentSubmission = getLastElement(board);
             cementChoice(currentSubmission);
             Guess currentGuess = getGuess(currentSubmission);
-            if (mmind.makeAGuess(currentGuess)){
+            Feedback feedback = mmind.makeAGuess(currentGuess);
+            displayScore(currentSubmission, feedback);
+            if (feedback.isAnswerCorrect()){
                 board.getChildren().add(new Text("You Won!!!"));
             } else{
                 board.getChildren().add(generateRow());
             }
         } else{
-            board.getChildren().add(new Text("Game Over!!!"));
+            Node currentSubmission = getLastElement(board);
+            cementChoice(currentSubmission);
+            Guess currentGuess = getGuess(currentSubmission);
+            Feedback feedback = mmind.makeAGuess(currentGuess);
+            displayScore(currentSubmission, feedback);
+            if (feedback.isAnswerCorrect()){
+                board.getChildren().add(new Text("You Won!!!"));
+            } else{
+                board.getChildren().add(new Text("Game Over!!!"));
+            }
         }
     }
 
     private HBox generateRow(){
         HBox h = new HBox();
-        index = board.getChildren().size() * mmind.getCodeSize();
+        int index = board.getChildren().size() * mmind.getCodeSize();
         for (int i = 0; i < mmind.getCodeSize(); i++){
             StackPane stackPane = new StackPane();
             Circle c = new Circle(15,pegColors.get(0));
             Button b = new Button("string");
-            c.setId("peg"+index);
-            b.setId("pegButton"+index);
+            c.setId("peg"+ index);
+            b.setId("pegButton"+ index);
             index++;
             b.setOpacity(0);
             final int[] color = {0};
@@ -122,8 +130,39 @@ public class guiController implements Initializable{
         return guess;
     }
 
-    private void displayScore(Node hBox){
+    private Node getLastElement(VBox b){
+        return b.getChildren().get(b.getChildren().size()-1);
+    }
 
+    private void displayScore(Node hBox,Feedback f){
+        if (hBox instanceof HBox){
+            HBox HBox = (HBox) hBox;
+            VBox currentVbox = new VBox();
+            int i = 0;
+            for (int bead:f.getScore()){
+                if (bead != 0) {
+                    VBox v;
+                    if (i % 2 == 0){
+                        v = new VBox();
+                        currentVbox = v;
+                    } else{
+                        HBox.getChildren().add(currentVbox);
+                        v = currentVbox;
+                    }
+                    Circle c = new Circle(7);
+                    if(bead == 2){
+                        c.setFill(Paint.valueOf("Black"));
+                    } else{
+                        c.setFill(Paint.valueOf("Grey"));
+                    }
+                    v.getChildren().add(c);
+                }
+                i++;
+            }
+            if (currentVbox.getChildren().size() == 1){
+                HBox.getChildren().add(currentVbox);
+            }
+        }
     }
 
     @Override

@@ -16,7 +16,6 @@ public class Guess {
         Utils.println("New Guess");
         for (int i = 0; i < codeSize; i++){
             pegs.add(-1);
-            //Utils.println("peg #" + (i+1) + ": " + pegs.get(i) + " ");
         }
     }
     public Guess(ArrayList<Integer> guess){
@@ -71,11 +70,15 @@ public class Guess {
         }
         for (int i = 0; i < guessPegs.size(); i++){
             for (int k = 0; k < answerPegs.size(); k++){
+                if (i >= guessPegs.size()){
+                    return feedback;
+                }
                 if (answerPegs.size() > 0 && guessPegs.size() > 0) {
                     if (guessPegs.get(i).equals(answerPegs.get(k))) {
                         feedback.add(1);
                         answerPegs.remove(k);
-                        k--;
+                        k=-1;
+                        i++;
                     }
                 }
             }

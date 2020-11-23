@@ -8,11 +8,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
@@ -25,6 +26,8 @@ public class mmind extends Application {
     private static boolean allowDuplicates;
     private static boolean allowBlankSpaces;
     private static Guess secretCode;
+    private static int width;
+    private static int height;
 
     @Override
     public void start(Stage stage) {
@@ -35,26 +38,33 @@ public class mmind extends Application {
             e.printStackTrace();
         }
         assert root != null;
-        Scene scene = new Scene(root, 640, 480);
+        Scene scene = new Scene(root,width,height, Paint.valueOf("Brown"));
+
         stage.setTitle("Master Mind");
         stage.setScene(scene);
+        stage.setAlwaysOnTop(true);
         stage.show();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         setupGame();
-
         //testUnderlyingCode();
         launch(args);
     }
 
     public static void setupGame(){
         Properties p = Utils.importProperties();
-        guesses = Integer.parseInt(p.getProperty("codePegRows","10"));
-        colors = Integer.parseInt(p.getProperty("colors","6"));
-        codeSize = Integer.parseInt(p.getProperty("codeSize","4"));
-        allowDuplicates = Boolean.parseBoolean(p.getProperty("dupsAllowedInCode","true"));
-        allowBlankSpaces = Boolean.parseBoolean(p.getProperty("blanksAllowedInCode"));
+        try {
+            guesses = Integer.parseInt(p.getProperty("codePegRows", "10"));
+            colors = Integer.parseInt(p.getProperty("colors", "6"));
+            codeSize = Integer.parseInt(p.getProperty("codeSize", "4"));
+            allowDuplicates = Boolean.parseBoolean(p.getProperty("dupsAllowedInCode", "true"));
+            allowBlankSpaces = Boolean.parseBoolean(p.getProperty("blanksAllowedInCode"));
+        } catch (NumberFormatException n){
+            n.printStackTrace();
+        }
+        width = (int) (56.5 * codeSize) + 20 * (codeSize/2 + codeSize % 2);
+        height = 49 + 35 * (guesses);
         secretCode = generateCode();
     }
 
@@ -117,8 +127,10 @@ public class mmind extends Application {
     public static boolean allowDuplicates(){return allowDuplicates;}
     public static boolean allowBlankSpaces(){return allowBlankSpaces;}
 
-    public static boolean makeAGuess(Guess guess){
-        guesses--;
-        return guess.equals(secretCode);
+    public static Feedback makeAGuess(Guess guess){
+        guesses -= 1;
+        boolean isCorrect = guess.equals(secretCode);
+        ArrayList<Integer> score = guess.score(secretCode);
+        return new Feedback(score,isCorrect);
     }
 }
